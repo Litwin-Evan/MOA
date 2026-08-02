@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOA · Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="calendar.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#070b11">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MOA">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <a class="brand" href="index.html" style="text-decoration:none;">
+      <div class="brand-mark"><span></span></div>
+      <div>
+        <div class="brand-name">MOA</div>
+        <div class="brand-sub">Calendar</div>
+      </div>
+    </a>
+    <div class="clock">
+      <div class="clock-time" id="clockTime">--:--</div>
+      <div class="clock-date" id="clockDate">Loading</div>
+    </div>
+  </div>
+
+  <div class="panel cal-voice-panel">
+    <div class="panel-title">Voice control</div>
+    <div class="text-row">
+      <input type="text" id="calCmdInput" placeholder='Try "Add dentist tomorrow at 3pm" or "What&#39;s on today?"' />
+      <button id="calCmdSend">Send</button>
+    </div>
+    <button id="calMicBtn" class="cal-mic-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z"/><path d="M19 11a7 7 0 01-14 0M12 19v3"/></svg>
+      <span class="cal-mic-label">Tap to speak</span>
+    </button>
+    <div class="cal-voice-feedback" id="calVoiceFeedback"></div>
+  </div>
+
+  <div class="cal-layout">
+
+    <div class="panel cal-panel">
+      <div class="cal-nav">
+        <button id="prevMonth" aria-label="Previous month">‹</button>
+        <div class="cal-month-label" id="monthLabel">--</div>
+        <button id="nextMonth" aria-label="Next month">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
+    <div class="panel cal-sidebar">
+      <div class="panel-title">
+        <span id="formTitle">New event</span>
+      </div>
+      <form id="eventForm">
+        <input type="hidden" id="eventId" />
+        <label class="cal-label">Date</label>
+        <input type="date" id="eventDate" required />
+        <label class="cal-label">Time</label>
+        <input type="time" id="eventTime" />
+        <label class="cal-label">Title</label>
+        <input type="text" id="eventTitle" placeholder="e.g. Dentist appointment" required />
+        <label class="cal-label">Notes</label>
+        <textarea id="eventNotes" placeholder="Optional details"></textarea>
+        <div class="cal-form-actions">
+          <button type="submit" id="saveBtn">Add event</button>
+          <button type="button" id="deleteBtn" class="cal-danger-btn" style="display:none;">Delete</button>
+          <button type="button" id="cancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </form>
+
+      <div class="panel-title" style="margin-top:24px;">Upcoming</div>
+      <div id="upcomingList"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="calendar.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
