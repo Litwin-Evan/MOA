@@ -25,7 +25,10 @@
         <div class="brand-sub">Personal HUD Assistant</div>
       </div>
     </div>
-    <a href="calendar.html" style="color:var(--cyan);font-size:12px;letter-spacing:1px;text-decoration:none;border:1px solid var(--line-strong);border-radius:20px;padding:6px 14px;">Calendar</a>
+    <div style="display:flex;gap:8px;">
+      <a href="calendar.html" style="color:var(--cyan);font-size:12px;letter-spacing:1px;text-decoration:none;border:1px solid var(--line-strong);border-radius:20px;padding:6px 14px;">Calendar</a>
+      <a href="settings.html" style="color:var(--cyan);font-size:12px;letter-spacing:1px;text-decoration:none;border:1px solid var(--line-strong);border-radius:20px;padding:6px 14px;">Settings</a>
+    </div>
     <div class="clock">
       <div class="clock-time" id="clockTime">--:--</div>
       <div class="clock-date" id="clockDate">Loading</div>
@@ -66,22 +69,9 @@
         <span class="wake-status" id="wakeStatus"></span>
       </div>
       <div class="ai-panel">
-        <div class="ai-config" id="aiConfig">
-          <input type="password" id="apiKeyInput" placeholder="Paste your Anthropic API key (sk-ant-...)" />
-          <button id="apiKeySave">Save key</button>
-        </div>
         <div class="ai-status-row">
           <span class="ai-status" id="aiStatus"></span>
-          <span class="ai-reset" id="aiReset">Change key</span>
         </div>
-        <div class="ai-local-row">
-          <label class="ai-local-toggle">
-            <input type="checkbox" id="ollamaToggle" />
-            Use local AI (Ollama) — free
-          </label>
-          <input type="text" id="ollamaModelInput" value="llama3.1:8b" placeholder="model name" />
-        </div>
-        <div class="ai-local-status" id="ollamaStatus"></div>
       </div>
       <div class="text-row">
         <input type="text" id="cmdInput" placeholder="Type a command..." />
@@ -115,25 +105,13 @@
         <div class="therm-label"><span>Thermostat</span><b id="thermVal">72°F</b></div>
         <input type="range" min="60" max="82" value="72" id="thermSlider" />
       </div>
-      <div class="hue-connect" id="hueConnect">
-        <button id="hueDiscoverBtn">Find Hue bridge</button>
-        <span class="hue-status" id="hueStatus"></span>
-      </div>
-      <div class="hue-manual" id="hueManual">
-        <input type="text" id="hueManualIp" placeholder="Or enter bridge IP manually, e.g. 192.168.1.42" />
-        <button id="hueManualBtn">Link</button>
-      </div>
       <div class="home-note" id="homeNote">
-        Not connected to a real bridge yet — lights above are simulated. Click "Find Hue bridge," then press the physical button on your bridge when prompted.
+        Lights above are simulated. Connect a Hue bridge in <a href="settings.html">Settings</a> to control real bulbs.
       </div>
     </div>
 
     <div class="panel span-wide">
       <div class="panel-title">Music <span class="home-badge" id="spotifyBadge">Not connected</span></div>
-      <div class="spotify-connect" id="spotifyConnect">
-        <input type="text" id="spotifyClientId" placeholder="Spotify Client ID" />
-        <button id="spotifyConnectBtn">Connect Spotify</button>
-      </div>
       <div class="spotify-status" id="spotifyStatus"></div>
 
       <div class="now-playing" id="nowPlaying" style="display:none;">

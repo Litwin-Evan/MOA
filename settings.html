@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOA · Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="settings.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#070b11">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MOA">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <a class="brand" href="index.html" style="text-decoration:none;">
+      <div class="brand-mark"><span></span></div>
+      <div>
+        <div class="brand-name">MOA</div>
+        <div class="brand-sub">Settings</div>
+      </div>
+    </a>
+    <a href="index.html" class="nav-pill">← Dashboard</a>
+  </div>
+
+  <div class="settings-grid">
+
+    <div class="panel">
+      <div class="panel-title">AI Assistant</div>
+      <p class="set-help">Choose how MOA answers questions outside its built-in commands. Local AI is free; the Claude API is paid but more capable.</p>
+
+      <label class="set-label">Anthropic API key</label>
+      <div class="set-row">
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+        <button id="apiKeySave">Save</button>
+      </div>
+      <div class="set-status" id="apiKeyStatus"></div>
+      <button class="set-danger-link" id="aiReset">Remove saved key</button>
+
+      <div class="set-divider"></div>
+
+      <label class="set-toggle">
+        <input type="checkbox" id="ollamaToggle" />
+        Use local AI (Ollama) instead — free
+      </label>
+      <label class="set-label">Model name</label>
+      <input type="text" id="ollamaModelInput" placeholder="llama3.1:8b" />
+      <div class="set-status" id="ollamaStatus"></div>
+      <p class="set-help">Requires Ollama running locally with OLLAMA_ORIGINS set. Only works when MOA is served from your own machine.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Briefing &amp; News</div>
+
+      <label class="set-toggle">
+        <input type="checkbox" id="autoBriefToggle" />
+        Play briefing automatically each morning
+      </label>
+      <p class="set-help">Speaks once per day on first open, between 4am and noon.</p>
+
+      <div class="set-divider"></div>
+
+      <label class="set-label">News source</label>
+      <select id="newsPreset">
+        <option value="https://moxie.foxnews.com/google-publisher/us.xml">Fox News — U.S.</option>
+        <option value="https://moxie.foxnews.com/google-publisher/world.xml">Fox News — World</option>
+        <option value="https://feeds.npr.org/1001/rss.xml">NPR — Top Stories</option>
+        <option value="http://feeds.bbci.co.uk/news/rss.xml">BBC News</option>
+        <option value="https://www.theguardian.com/world/rss">The Guardian — World</option>
+        <option value="custom">Custom RSS feed…</option>
+      </select>
+      <input type="text" id="newsCustom" placeholder="https://example.com/rss.xml" style="display:none;margin-top:8px;" />
+      <button id="newsSave" style="margin-top:10px;">Save news source</button>
+      <div class="set-status" id="newsStatus"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Music <span class="home-badge" id="spotifyBadge">Not connected</span></div>
+      <p class="set-help">Requires Spotify Premium. Your Client ID comes from the Spotify Developer Dashboard.</p>
+      <div class="spotify-connect" id="spotifyConnect">
+        <input type="text" id="spotifyClientId" placeholder="Spotify Client ID" />
+        <button id="spotifyConnectBtn">Connect Spotify</button>
+      </div>
+      <div class="spotify-status" id="spotifyStatus"></div>
+      <button class="set-danger-link" id="spotifyDisconnect">Disconnect Spotify</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Smart Home <span class="home-badge" id="hueBadge">Demo mode</span></div>
+      <p class="set-help" id="hueLocalWarning"></p>
+      <div class="hue-connect" id="hueConnect">
+        <button id="hueDiscoverBtn">Find Hue bridge</button>
+        <span class="hue-status" id="hueStatus"></span>
+      </div>
+      <div class="hue-manual" id="hueManual">
+        <input type="text" id="hueManualIp" placeholder="Bridge IP, e.g. 192.168.1.42" />
+        <button id="hueManualBtn">Link</button>
+      </div>
+      <div class="home-note" id="homeNote">
+        Press the physical button on your Hue bridge, then click Link.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Data</div>
+      <p class="set-help">Everything MOA stores lives in this browser only. Nothing is uploaded anywhere.</p>
+      <button class="set-danger-btn" id="clearChat">Clear AI conversation memory</button>
+      <button class="set-danger-btn" id="clearTimers">Clear all timers &amp; reminders</button>
+      <button class="set-danger-btn" id="clearCalendar">Delete all calendar events</button>
+      <div class="set-status" id="dataStatus"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="settings.js"></script>
+<script src="hue.js"></script>
+<script src="spotify.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>

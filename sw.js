@@ -1,13 +1,16 @@
-const CACHE_NAME = 'moa-cache-v1';
+const CACHE_NAME = 'moa-cache-v3';
 const APP_SHELL = [
   './index.html',
   './calendar.html',
+  './settings.html',
   './style.css',
   './calendar.css',
+  './settings.css',
   './app.js',
   './hue.js',
   './spotify.js',
   './calendar.js',
+  './settings.js',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png'

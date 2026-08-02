@@ -78,13 +78,15 @@ function renderWeather(){
 
 /* ---------- NEWS (live, via NPR RSS through rss2json, no key needed) ---------- */
 let liveNews = [];
-const NEWS_FEED = 'https://moxie.foxnews.com/google-publisher/us.xml';
+const NEWS_FEED_KEY = 'moa_news_feed';
+const DEFAULT_NEWS_FEED = 'https://moxie.foxnews.com/google-publisher/us.xml';
+function getNewsFeed(){ return localStorage.getItem(NEWS_FEED_KEY) || DEFAULT_NEWS_FEED; }
 
 async function fetchNews(){
   const btn = document.getElementById('newsRefresh');
   btn.classList.add('spinning');
   try{
-    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(NEWS_FEED)}`;
+    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(getNewsFeed())}`;
     const res = await fetch(url);
     const data = await res.json();
     if(data.status !== 'ok' || !data.items) throw new Error('news fetch failed');
@@ -313,18 +315,15 @@ function clearApiKey(){
 
 function updateAiStatus(){
   const status = document.getElementById('aiStatus');
-  const configRow = document.getElementById('aiConfig');
+  if(!status) return;
   const key = getApiKey();
   const useOllama = getOllamaEnabled();
   if(useOllama){
-    status.textContent = 'AI chat active via local Ollama (free).';
-    configRow.style.display = 'none';
+    status.innerHTML = 'AI chat active via local Ollama. <a href="settings.html" style="color:var(--cyan);">Settings</a>';
   } else if(key){
-    status.textContent = 'AI chat active — ask me anything.';
-    configRow.style.display = 'none';
+    status.innerHTML = 'AI chat active. <a href="settings.html" style="color:var(--cyan);">Settings</a>';
   } else {
-    status.textContent = 'AI chat off — add an API key or enable local AI.';
-    configRow.style.display = 'flex';
+    status.innerHTML = 'AI chat off — <a href="settings.html" style="color:var(--cyan);">enable it in Settings</a>';
   }
 }
 
@@ -404,6 +403,7 @@ function setOllamaModel(name){ localStorage.setItem(OLLAMA_MODEL_KEY, name); }
 
 async function checkOllama(){
   const statusEl = document.getElementById('ollamaStatus');
+  if(!statusEl) return;
   if(!getOllamaEnabled()){ statusEl.textContent = ''; return; }
   statusEl.textContent = 'Checking connection...';
   try{
@@ -1093,45 +1093,12 @@ document.getElementById('wxRefresh').addEventListener('click', fetchWeather);
 document.getElementById('newsRefresh').addEventListener('click', fetchNews);
 document.getElementById('briefBtn').addEventListener('click', showBriefing);
 
-document.getElementById('apiKeySave').addEventListener('click', () => {
-  const val = document.getElementById('apiKeyInput').value.trim();
-  if(!val) return;
-  saveApiKey(val);
-  clearConversationHistory();
-  document.getElementById('apiKeyInput').value = '';
-  updateAiStatus();
-  logLine('AI chat enabled. Ask me anything.', 'sys');
-});
-document.getElementById('aiReset').addEventListener('click', () => {
-  clearApiKey();
-  clearConversationHistory();
-  updateAiStatus();
-  logLine('AI chat key removed.', 'sys');
-});
-
-document.getElementById('ollamaToggle').addEventListener('change', (e) => {
-  setOllamaEnabled(e.target.checked);
-  clearConversationHistory();
-  updateAiStatus();
-  checkOllama();
-});
-document.getElementById('ollamaModelInput').addEventListener('change', (e) => {
-  setOllamaModel(e.target.value.trim() || 'llama3.1:8b');
-});
-
 document.getElementById('timersClearAll').addEventListener('click', cancelAllTimers);
-
-document.getElementById('autoBriefToggle').addEventListener('change', (e) => {
-  setAutoBriefEnabled(e.target.checked);
-  logLine(e.target.checked ? 'Morning briefing will play automatically.' : 'Automatic morning briefing turned off.', 'sys');
-});
 
 /* ---------- INIT ---------- */
 updateClock();
 setInterval(updateClock, 15000);
 renderDevices();
-document.getElementById('ollamaToggle').checked = getOllamaEnabled();
-document.getElementById('ollamaModelInput').value = getOllamaModel();
 conversationHistory = loadConversationHistory();
 if(conversationHistory.length){
   logLine(`Resumed previous conversation (${Math.floor(conversationHistory.length / 2)} exchanges). Say "new conversation" to start fresh.`, 'sys');
@@ -1142,7 +1109,6 @@ document.getElementById('wakeToggle').checked = getWakeEnabled();
 if(getWakeEnabled()){
   setWakeStatus('Click the toggle to (re)activate listening.');
 }
-document.getElementById('autoBriefToggle').checked = getAutoBriefEnabled();
 renderTimers();
 tickTimers();
 setInterval(tickTimers, 1000);
